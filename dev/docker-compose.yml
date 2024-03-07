@@ -1,0 +1,36 @@
+version: '3.3'
+services:
+  mongo:
+    # seperate container by makin diff image?- Yes
+    image: mongo:4.2.5
+#    ports:
+#      - '27017:27017'
+  app:
+    build: Flask
+
+    environment:
+      # env var for mongo local - name matters :port
+      WAIT_HOSTS: mongo:27017
+    ports:
+      - '8000:8000'
+     # wasnt connectiong DB and APP
+
+#      # when running w/o DB w/o Env Var.
+#       - '8080:8080'
+
+
+
+
+
+
+#  mongo:
+#    image: mongo:4.2.5
+#  app:
+#    build: .
+#    environment:
+#      WAIT_HOSTS: mongo:27017
+#    ports:
+#    -  '8080:8000'
+
+
+# compose build every time you change code

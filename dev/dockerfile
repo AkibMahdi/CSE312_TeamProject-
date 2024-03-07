@@ -1,0 +1,26 @@
+# INCLUDE DOCKERFIULE WORK HERE
+FROM python:3.8.2
+
+#cding to my home dir always works? - can we talk about how that works
+ENV  HOME /root
+
+WORKDIR /root
+
+COPY Flask .
+
+# installing dependices
+RUN pip install -r requirements.txt
+# all the photos,icons too?
+EXPOSE 8000
+
+
+# # delay for the DB and the container upload
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.2.1/wait /wait
+RUN chmod +x /wait
+
+#![](../../../../../../var/folders/93/slvt2p8n0wg7lngy5pyx7x400000gn/T/TemporaryItems/NSIRD_screencaptureui_RVpUbH/Screenshot 2024-02-12 at 9.23.05 PM.png)
+
+CMD /wait  && python -u app.py
+#(name of docker image )
+#CMD python -u server.py
+
