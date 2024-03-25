@@ -20,6 +20,10 @@ login_manager = LoginManager(app)
 #mongo.db.create_collection('users')
 
 
+auth-test
+
+
+main
 class User(UserMixin):
     def __init__(self, username, password_hash=None, auth_token_hash=None, _id=None):
         self.username = username
