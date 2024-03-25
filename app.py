@@ -25,6 +25,7 @@ class User(UserMixin):
         self.password_hash = password_hash
         self.auth_token_hash = auth_token_hash
         self._id = _id
+        
 
     def get_id(self):
         return str(self._id)
