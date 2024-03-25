@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Website</title>
+    <link rel="stylesheet" href="/static/recipe.css">
+</head>
+<body>
+    <nav>
+        <div class= "navbar">
+            <ul>
+                <li><a href="/usercreate">Register or Login</a></li>
+                <li><a href="/recipe">Create Recipe</a></li>
+                <li><a id="home" href="/">Home</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class='recipepost'>
+        <h2>FlavorFeed</h2>
+        <form method ="POST" action="/recipe">
+        <input type="text" name="recipename" placeholder="Enter Recipe Name" required><br><br>
+        <input type="text" name="recipeingredients" placeholder="Enter Ingredients Seperated by Commas, Specify Portion by :" required><br><br>
+        <input type="text" name="recipedescription" placeholder="Enter Recipe Name" required><br><br>
+
+        <input type="submit" value="Add Recipe" name="addrecipe" > <br><br>
+         Current User:  {{current_user.username}}
+        </form>
+    </header>
+
+    <div id="recipesContainer"></div>
+
+
+    <div class="container">
+        {% for recipe in recipes|reverse %}
+        <div class="recipe-card" >
+            <form method="POST" action="/recipe">
+            <h3>{{ recipe.recipename }}</h3>
+            <input type="hidden" name="recipe_id" value="{{recipe._id}}">
+
+            <p>Recipe ID: {{recipe._id}}</p>
+ 
+            <p>Ingredients: {{ recipe.ingredients }}</p>
+            <p>Description: {{ recipe.description }}</p>
+            <p>Username:{{recipe.username}}</p>
+            
+            <h4>Comments</h4>
+            {% if recipe.comments %}
+                {% for comment in recipe.comments %}
+                    <p>{{ comment.user }}: {{ comment.content }}</p>
+                {% endfor %}
+            {% else %}
+                <p>No comments yet.</p>
+            {% endif %}
+
+            <form method="POST" action="/recipe">
+                <input type="hidden" name="recipe_id" value="{{ recipe._id }}">
+                <input type="text" placeholder="Comment" name="comment">
+                <input type="submit" name='addcomment'>
+            </form>
+        </div>
+        {% endfor %}
+
+    </div>
+
+    <script src="/static/recipe.js"></script>
+</body>
+</html>
