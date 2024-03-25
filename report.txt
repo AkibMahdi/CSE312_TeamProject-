@@ -1,0 +1,13 @@
+
+---
+
+The images below illustrate the progress made by our team members during the completion of Part 1 of the CSE 312 project. Assigned specific tasks within the required three portions, each member collaborated continuously to ensure project success.
+
+Kayla and Bradley worked closely on Part 1, focusing on the frontend development (HTML, CSS, and JavaScript) to connect the landing and recipe pages and integrate navigation to the login page. Farhan led the implementation of Part 2, meticulously incorporating security features with guidance from teammates and utilizing resources from the Flask documentation. Akib provided invaluable support by ensuring all changes were accurately reflected on GitHub and overseeing the completion of login and registration features to a high standard.
+
+Abdulla dedicated efforts to implementing the chat feature, integrating essential security checks to ensure flawless execution. Additionally, Kayla took responsibility for documenting project progress through detailed GitHub reports.
+
+Several team members demonstrated their commitment by attending office hours for guidance and ensuring project alignment. It's noteworthy that all team members diligently reviewed and confirmed that everyone's contributions were successfully pushed to the main branch.
+
+---
+
