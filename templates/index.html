@@ -1,4 +1,3 @@
-<!--BY NO MEANS IS THIS A PROTOTYPE, MOCKED UP A REGISTRATION PAGE ONLY TO TEST AUTHENTIFICATON FEATURES-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -86,7 +85,6 @@
     </header>
 
     <div class="container">
-        <!-- Registration Form -->
         <section id="register">
             <h2>Register</h2>
             <form method="POST" action="/usercreate">
@@ -97,7 +95,6 @@
             </form>
         </section>
 
-        <!-- Login Form -->
         <section id="login">
             <h2>Login</h2>
             <form method="POST" action="/usercreate">
@@ -107,14 +104,19 @@
             </form>
         </section>
 
-        <!-- Logged In User Display -->
         <section id="user-info">
-            <!-- This will be hidden or shown depending on the logged-in status -->
-            <p>Welcome, <span id="username">{{current_user.username}}</span>!</p>
-            <form action="/logout">
-                <input type="submit" value="Logout">
-            </form>
+            {% if current_user.is_authenticated %}
+                <p>Welcome, <span id="username">{{ current_user.username }}</span>! You can now access the Recipes Page via the NavBar.</p>
+                <form action="/logout" method="post">
+                    <input type="submit" value="Logout">
+                </form>
+            {% else %}
+                <p>Welcome, Guest! Please create an account or login.</p>
+            {% endif %}
         </section>
     </div>
+
+
+    
 </body>
 </html>

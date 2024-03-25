@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, make_response
 from flask_pymongo import PyMongo
-from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user
+from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from flask_bcrypt import Bcrypt
 from bson.objectid import ObjectId
 from markupsafe import escape
+import hashlib
 
 
 app = Flask(__name__)
@@ -53,10 +54,11 @@ def load_user(user_id):
 def home():
     flash("page loaded")
 
+    
+
     if request.method == 'POST':
         users_collection = mongo.db.users
         if 'register' in request.form:
-            # Registration logic
             username = request.form.get('username')
             password = request.form.get('password')
             confirm_password = request.form.get('confirm_password')
@@ -113,16 +115,77 @@ def logout():
     resp.set_cookie('auth_token', '', expires=0)
 
 
+
     return resp
 
-@app.route('/recipe')
+@app.route('/recipe', methods=['GET', 'POST'])
+@login_required
 def recipepage():
-    return render_template("recipe.html")
+    recipes_collection = mongo.db.recipes
+    comments_collection = mongo.db.comments
+
+
+    if request.method == 'POST':
+        if 'addcomment' in request.form:
+            comments_collection.insert_one({
+                'content': request.form.get('comment'),
+                'user': current_user.username,
+                'recipeid': ObjectId(request.form.get('recipe_id'))
+            })
+            return redirect(url_for('recipepage'))
+        elif 'addrecipe' in request.form:
+            recipes_collection.insert_one({
+                'recipename': request.form.get('recipename'),
+                'ingredients': request.form.get('recipeingredients'),
+                'description': request.form.get('recipedescription'),
+                'username': current_user.username
+            })
+            return redirect(url_for('recipepage'))
+        
+    all_recipes = list(recipes_collection.find())
+    for recipe in all_recipes:
+        recipe['comments'] = list(comments_collection.find({'recipeid': ObjectId(recipe['_id'])}))
+
+    return render_template("recipe.html", recipes=all_recipes, user=current_user)
+
+
+def verify_token(auth_token):
+    user = User.query.filter_by(auth_token=auth_token).first()
+    if user:
+        return user
+    else:
+        return None
+
+
+@app.before_request
+def before_request_func():
+    if request.endpoint in ['home', 'static', None] or 'usercreate' in request.path:
+        return
+
+    if current_user.is_authenticated:
+        auth_token = request.cookies.get('auth_token')
+        if auth_token:
+            if not current_user.check_auth_token(auth_token):
+                flash("Session invalid or expired. Please log in again.", "warning")
+                return logout()
+        else:
+            flash("Please log in to continue.", "info")
+            return redirect(url_for('home'))
+
+
+        
+
+
+
+@app.after_request
+def set_response_headers(response):
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    return response
+
+ 
 
 @app.route('/')
-#definging pages on website- represnt what were displaying
 def homepage():
-    #inline html- when we return to function
     return render_template("landing.html")
 
 if __name__ == '__main__':
