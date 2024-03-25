@@ -73,10 +73,14 @@
                 <h1>Recipe App</h1>
             </div>
             <nav>
-                <ul>
-                    <li class="current"><a href="/">Home</a></li>
-                    <!-- Add other navigation links here -->
-                </ul>
+                <div id= "navbar">
+        
+                    <ul ><li>
+                        <li><a href="/usercreate">Register or Login</a></li>
+                        <li><a href="/recipe">Create Recipe</a></li>
+                        <li><a id="home" href="/">Home</a></li>
+                    </ul>
+                </div>
             </nav>
         </div>
     </header>
@@ -85,7 +89,7 @@
         <!-- Registration Form -->
         <section id="register">
             <h2>Register</h2>
-            <form method="POST" action="/">
+            <form method="POST" action="/usercreate">
                 <input type="text" name="username" placeholder="Enter Username" required>
                 <input type="password" name="password" placeholder="Enter Password" required>
                 <input type="password" name="confirm_password" placeholder="Confirm Password" required>
@@ -96,7 +100,7 @@
         <!-- Login Form -->
         <section id="login">
             <h2>Login</h2>
-            <form method="POST" action="/">
+            <form method="POST" action="/usercreate">
                 <input type="text" name="username" placeholder="Enter Username" required>
                 <input type="password" name="password" placeholder="Enter Password" required>
                 <input type="submit" value="login" name="login">
