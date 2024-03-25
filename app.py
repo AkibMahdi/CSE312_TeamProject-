@@ -5,7 +5,6 @@ from flask_bcrypt import Bcrypt
 from bson.objectid import ObjectId
 from markupsafe import escape
 
-
 app = Flask(__name__)
 #THIS IS THE CONNECTION STRING NEEDED TO CONNECT TO THE DATABASE
 app.config['MONGO_URI'] = 'mongodb+srv://farhanmukit0:LnBsfo2rFTk0OSFF@cluster0.otbjk4d.mongodb.net/recipeapp'
@@ -115,26 +114,34 @@ def logout():
 
     return resp
 
-<<<<<<< HEAD
-@app.route('/')
-#definging pages on website- represnt what were displaying
-def homepage():
-    #inline html- when we return to function
-    return render_template("landing.html")
-
-if __name__ == '__main__':
-    app.run(debug=True)
-=======
-@app.route('/recipe')
+@app.route('/recipe', methods=['GET', 'POST'])
 def recipepage():
-    return render_template("recipe.html")
->>>>>>> e3c18ec2a39ece0d80cc8a34efc9735bcea4501b
+    recipes_collection = mongo.db.recipes
+    comments_collection = mongo.db.comments
+    if request.method == 'POST':
+        recipename = request.form.get('recipename')
+        ingredients = request.form.get('recipeingredients')
+        desc = request.form.get('recipedescription')
 
-@app.route('/')
-#definging pages on website- represnt what were displaying
-def homepage():
-    #inline html- when we return to function
-    return render_template("landing.html")
+        recipes_collection.insert_one({'recipename': recipename, 'ingredients': ingredients, 'description': desc, 'username':current_user.username})
 
-if __name__ == '__main__':
-    app.run(debug=True)
+        return render_template("recipe.html", recipes=all_recipes, user=current_user)
+    
+
+
+        #return redirect(url_for('recipepage'))
+    
+    # if request.method == 'GET':
+    #     cards = []
+
+    #     for recipe in recipes_collection:
+    #         recipeNameId = recipe['recipename']
+    #         recipeIngredientsId = recipe['ingredients']
+    #         recipeDescription = recipe['description']
+    #         cards.append([recipeNameId, recipeIngredientsId, recipeDescription, User.username])
+
+    all_recipes = recipes_collection.find() 
+    print(all_recipes) # This retrieves all documents in the recipes collection
+
+    # Passing all recipes to the template
+    return render_template("recipe.html", recipes=all_recipes, user=current_user)
