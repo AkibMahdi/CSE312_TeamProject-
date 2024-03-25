@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+
+    <script type="text/javascript" src="/static/script.js"></script>
+
+
+<style>
+*{
+    margin: 0;
+    padding:0;
+}
+body{
+    background: rgba(0,0,0,0.7)  center center fixed;
+    background-size: cover;
+    background-blend-mode: darken;
+    font-family: Cambira, Cochin, Georigia, Times, 'Times New Roman'
+}
+
+container{display: flex; align-items: center; justify-content: space-between;  }
+
+h1{ color: orangered; margin-left: 10px; cursor: pointer; }
+
+ ul li{
+    display: inline-block; padding: 18px; text-transform: uppercase;
+}
+ #container #navbar ul li a{
+    text-decoration: none; color: #fff; padding:4px; transition: 5s}
+
+
+ #container #navbar ul li a#home:hover {
+    box-shadow: 0 3px 50px orangered inset,0 3px 50px orangered inset,0 3px 50px orangered inset,0 3px 50px orangered inset,0 3px 50px orangered inset;}
+
+#container #navbar ul li a #home {
+    padding: 8px;
+    background-color: orangered;
+}
+ .content{position: absolute; color: #fff; top: 40%; left: 30%; }
+
+
+#foot footer{position: fixed; 
+            bottom: 0;}
+.content h3{ font-family: sans-serif, font-size: 20px; margin-left: 30px;}
+.content h1{font-size: 50px;}
+
+
+
+.content p{text-align: center;margin-top: 17px; font-size: 15px;}
+
+
+.search{ position: absolute; margin-top: 26%; margin-left: 42%;}
+
+.search input{ position: aboslute; outline: none; border: none; padding: 12px 40px; size: 1em; width: 100&; margin-top: 90%}
+
+
+.submit{position: absolute; margin-top: 60%; margin-left: 50%;}
+
+</style>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body onload="alertOnLoad()">
+<img src = "/static/logo.jpg" class="logo" id="logo"/>
+<h3> this is the pending cuisine logo</h3>
+    <div id="container">
+        <h1> Pending Cuisine</h1>
+        <div id= "navbar">
+
+            <ul ><li>
+                <li><a href="/usercreate">Register or Login</a></li>
+                <li><a href="/recipe">Create Recipe</a></li>   
+                <li><a id="home" href="/">Home</a></li>
+            </ul>
+        </div>
+</div>
+<div class="content">
+    <h3> Welcome to Pending Cuisine</h3><br>
+            <h1> Rich Healthy and Natural Food </h1>
+            <p> Discover the culinary delights of Pending Cuisine, nestled in the heart of Buffalo, New York. Treat yourself to an exceptional dining experience, where each dish is meticulously prepared to perfection.</p><br>
+</div>
+<div class="search">
+    <input type="text" placeolder="Search Food">
+</div>
+<div class="submit">
+<a href="#"> Submit</a>
+</div>
+
+
+<div id="foot">
+<footer>
+        <small> Copy: 2024, all rights reserved  </small>
+        <p> See our <a href="#"> Terms &amp; Conditions </a></p>
+    </footer>
+    </div>
+</body>
+</html>

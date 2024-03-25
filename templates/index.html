@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type='text/javascript' src="/static/script.js"></script>
+    <title>Recipe App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        header {
+            background: #50b3a2;
+            color: white;
+            padding-top: 30px;
+            min-height: 70px;
+            border-bottom: #e8491d 3px solid;
+        }
+
+        header a {
+            color: #ffffff;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 16px;
+        }
+
+        header ul {
+            padding: 0;
+            list-style: none;
+        }
+
+        header li {
+            display: inline;
+            margin: 0 20px;
+        }
+
+        header #branding {
+            float: left;
+        }
+
+        header #branding h1 {
+            margin: 0;
+        }
+
+        header nav {
+            float: right;
+            margin-top: 10px;
+        }
+
+        header .highlight, header .current a {
+            color: #e8491d;
+            font-weight: bold;
+        }
+
+        header a:hover {
+            color: #ffffff;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div id="branding">
+                <h1>Recipe App</h1>
+            </div>
+            <nav>
+                <div id= "navbar">
+        
+                    <ul ><li>
+                        <li><a href="/usercreate">Register or Login</a></li>
+                        <li><a href="/recipe">Create Recipe</a></li>
+                        <li><a id="home" href="/">Home</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <section id="register">
+            <h2>Register</h2>
+            <form method="POST" action="/usercreate">
+                <input type="text" name="username" placeholder="Enter Username" required>
+                <input type="password" name="password" placeholder="Enter Password" required>
+                <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+                <input type="submit" value="register" name="register">
+            </form>
+        </section>
+
+        <section id="login">
+            <h2>Login</h2>
+            <form method="POST" action="/usercreate">
+                <input type="text" name="username" placeholder="Enter Username" required>
+                <input type="password" name="password" placeholder="Enter Password" required>
+                <input type="submit" value="login" name="login">
+            </form>
+        </section>
+
+        <section id="user-info">
+            {% if current_user.is_authenticated %}
+                <p>Welcome, <span id="username">{{ current_user.username }}</span>! You can now access the Recipes Page via the NavBar.</p>
+                <form action="/logout" method="post">
+                    <input type="submit" value="Logout">
+                </form>
+            {% else %}
+                <p>Welcome, Guest! Please create an account or login.</p>
+            {% endif %}
+        </section>
+    </div>
+
+
+    
+</body>
+</html>
