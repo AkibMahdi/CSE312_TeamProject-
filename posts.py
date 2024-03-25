@@ -46,8 +46,24 @@ def login():
 
 @app.route('/recipe', methods=['GET', 'POST'])
 def recipes():
-    
+    if request.method == 'POST':
+       
+        recipe_name = request.form.get('name')
+        ingredients = request.form.get('ingredients')
+        description = request.form.get('description')
+
+      
+        recipe_collection.insert_one({
+            'name': recipe_name,
+            'ingredients': ingredients.split(';'), 
+            'description': description
+        })
+
+        return redirect(url_for('home')) 
+     
     return render_template('recipe.html')
+    
+
             
 
 
