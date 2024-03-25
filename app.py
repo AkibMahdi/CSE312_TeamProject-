@@ -7,7 +7,9 @@ from markupsafe import escape
 
 
 app = Flask(__name__)
+#THIS IS THE CONNECTION STRING NEEDED TO CONNECT TO THE DATABASE
 app.config['MONGO_URI'] = 'mongodb+srv://farhanmukit0:LnBsfo2rFTk0OSFF@cluster0.otbjk4d.mongodb.net/recipeapp'
+#PASS
 app.config['SECRET_KEY'] = 'LnBsfo2rFTk0OSFF'
 
 mongo = PyMongo(app)

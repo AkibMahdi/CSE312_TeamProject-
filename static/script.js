@@ -1,3 +1,5 @@
+//JS CURRENTLY DOES NOT SERVE ANY PURPOSE, ALL FUNCTIONALITY TAKEN OVER BY FLASK-app.py
+
 document.addEventListener("DOMContentLoaded", function() {
     // Get references to the search bar and submit button
     var searchInput = document.querySelector(".search input");
