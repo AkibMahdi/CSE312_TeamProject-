@@ -110,6 +110,12 @@ def logout():
     resp.set_cookie('auth_token', '', expires=0)
     return resp
 
+@app.route('/')
+#definging pages on website- represnt what were displaying
+def homepage():
+    #inline html- when we return to function
+    return render_template("landing.html")
+
 if __name__ == '__main__':
     app.run(debug=True)
 

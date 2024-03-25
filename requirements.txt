@@ -4,4 +4,5 @@ Flask-Bcrypt==0.7.1
 Flask-PyMongo==2.3.0
 markupsafe==2.1.1
 Werkzeug==2.0.2
+flask_uploads
 
