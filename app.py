@@ -25,6 +25,7 @@ class User(UserMixin):
         self.password_hash = password_hash
         self.auth_token_hash = auth_token_hash
         self._id = _id
+        
 
     def get_id(self):
         return str(self._id)
@@ -48,7 +49,7 @@ def load_user(user_id):
         return None
     return User(username=u['username'], password_hash=u['password_hash'], auth_token_hash=u['auth_token_hash'], _id=u['_id'])
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/usercreate', methods=['GET', 'POST'])
 def home():
     flash("page loaded")
 
@@ -110,9 +111,19 @@ def logout():
     logout_user()
     resp = make_response(redirect(url_for('home')))
     resp.set_cookie('auth_token', '', expires=0)
+
+
     return resp
+
+@app.route('/recipe')
+def recipepage():
+    return render_template("recipe.html")
+
+@app.route('/')
+#definging pages on website- represnt what were displaying
+def homepage():
+    #inline html- when we return to function
+    return render_template("landing.html")
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-
