@@ -1,6 +1,4 @@
-//JS CURRENTLY DOES NOT SERVE ANY PURPOSE, ALL FUNCTIONALITY TAKEN OVER BY FLASK-app.py
-
-document.addEventListener("DOMContentLoaded", function() {
+ocument.addEventListener("DOMContentLoaded", function() {
     // Get references to the search bar and submit button
     var searchInput = document.querySelector(".search input");
     var submitButton = document.querySelector(".submit a");
@@ -42,5 +40,3 @@ function showLoginForm() {
     document.getElementById('login-form').style.display = 'block';
     document.getElementById('registration-form').style.display = 'none';
 }
-
-
