@@ -1,109 +1,120 @@
+<!--BY NO MEANS IS THIS A PROTOTYPE, MOCKED UP A REGISTRATION PAGE ONLY TO TEST AUTHENTIFICATON FEATURES-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pending Cuisine</title>
-    <link rel="stylesheet" href="/static/styles.css">
-    
+    <script type='text/javascript' src="/static/script.js"></script>
+    <title>Recipe App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        header {
+            background: #50b3a2;
+            color: white;
+            padding-top: 30px;
+            min-height: 70px;
+            border-bottom: #e8491d 3px solid;
+        }
+
+        header a {
+            color: #ffffff;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 16px;
+        }
+
+        header ul {
+            padding: 0;
+            list-style: none;
+        }
+
+        header li {
+            display: inline;
+            margin: 0 20px;
+        }
+
+        header #branding {
+            float: left;
+        }
+
+        header #branding h1 {
+            margin: 0;
+        }
+
+        header nav {
+            float: right;
+            margin-top: 10px;
+        }
+
+        header .highlight, header .current a {
+            color: #e8491d;
+            font-weight: bold;
+        }
+
+        header a:hover {
+            color: #ffffff;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <nav>
-            <div class="container">
-                <h1>Pending Cuisine</h1>
-                <ul class="nav-links">
-                    <li><a href="#" class="btn">Home</a></li>
-                    <li><a href="#" class="btn">About</a></li>
-                    <li><a href="#" class="btn">Services</a></li>
-                    <li><a href="#" class="btn">Gallery</a></li>
-                    <li><a href="#" class="btn">Contact</a></li>
-                </ul>
-                <ul class="auth-links">
-                    {% if current_user.is_authenticated %}
-                        <li><a href="/" class="btn">Logout</a></li>
-                    {% else %}
-                        <li><a href="/" class="btn">Login</a></li>
-                        <li><a href="/" class="btn">Register</a></li>
-                    {% endif %}
-                </ul>
+        <div class="container">
+            <div id="branding">
+                <h1>Recipe App</h1>
             </div>
-        </nav>
-        <div class="hero">
-            <div class="container">
-                <h2>Welcome to Pending Cuisine</h2>
-                <p>Discover the culinary delights of Pending Cuisine, nestled in the heart of Buffalo, New York.</p>
-                <a href="#" class="btn">Explore</a>
-            </div>
+            <nav>
+                <div id= "navbar">
+        
+                    <ul ><li>
+                        <li><a href="/usercreate">Register or Login</a></li>
+                        <li><a href="/recipe">Create Recipe</a></li>
+                        <li><a id="home" href="/">Home</a></li>
+                    </ul>
+                </div>
+            </nav>
         </div>
     </header>
 
-    <!-- Registration Form -->
-<div id="registration-form" style="display:none;">
-    <h2>Register</h2>
-    <form action="/" method="POST">
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <input type="password" name="confirm_password" placeholder="Confirm Password" required>
-        <button type="submit">Register</button>
-    </form>
-</div>
+    <div class="container">
+        <!-- Registration Form -->
+        <section id="register">
+            <h2>Register</h2>
+            <form method="POST" action="/usercreate">
+                <input type="text" name="username" placeholder="Enter Username" required>
+                <input type="password" name="password" placeholder="Enter Password" required>
+                <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+                <input type="submit" value="register" name="register">
+            </form>
+        </section>
 
-<!-- Login Form -->
-<div id="login-form" style="display:none;">
-    <h2>Login</h2>
-    <form action="/" method="POST">
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <button type="submit">Login</button>
-    </form>
-</div>
+        <!-- Login Form -->
+        <section id="login">
+            <h2>Login</h2>
+            <form method="POST" action="/usercreate">
+                <input type="text" name="username" placeholder="Enter Username" required>
+                <input type="password" name="password" placeholder="Enter Password" required>
+                <input type="submit" value="login" name="login">
+            </form>
+        </section>
 
-<!-- Toggle Buttons -->
-<button onclick="showRegistrationForm()">Register</button>
-<button onclick="showLoginForm()">Login</button>
-
-<script>
-    function showRegistrationForm() {
-        document.getElementById('registration-form').style.display = 'block';
-        document.getElementById('login-form').style.display = 'none';
-    }
-
-    function showLoginForm() {
-        document.getElementById('login-form').style.display = 'block';
-        document.getElementById('registration-form').style.display = 'none';
-    }
-</script>
-
-    <section class="about">
-        <div class="container">
-            <h2>About Us</h2>
-            <p>Learn about our mission to provide rich, healthy, and natural food to our customers.</p>
-            <a href="#" class="btn">Read More</a>
-        </div>
-    </section>
-
-    <section class="services">
-        <div class="container">
-            <h2>Our Services</h2>
-            <p>Explore our range of services including catering, event planning, and private dining.</p>
-            <a href="#" class="btn">View Services</a>
-        </div>
-    </section>
-
-    <section class="gallery">
-        <div class="container">
-            <h2>Gallery</h2>
-            <!-- Add gallery images here -->
-        </div>
-    </section>
-
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 Pending Cuisine. All rights reserved.</p>
-        </div>
-    </footer>
+        <!-- Logged In User Display -->
+        <section id="user-info">
+            <!-- This will be hidden or shown depending on the logged-in status -->
+            <p>Welcome, <span id="username">{{current_user.username}}</span>!</p>
+            <form action="/logout">
+                <input type="submit" value="Logout">
+            </form>
+        </section>
+    </div>
 </body>
-
-<script src="/static/app.js"></script>
 </html>

@@ -7,12 +7,17 @@ from markupsafe import escape
 
 
 app = Flask(__name__)
-app.config['MONGO_URI'] = 'mongodb+srv://farhanmukit0:LnBsfo2rFTk0OSFF@cluster0.otbjk4d.mongodb.net/'
-#app.config['SECRET_KEY'] = 'your_secret_key'
+#THIS IS THE CONNECTION STRING NEEDED TO CONNECT TO THE DATABASE
+app.config['MONGO_URI'] = 'mongodb+srv://farhanmukit0:LnBsfo2rFTk0OSFF@cluster0.otbjk4d.mongodb.net/recipeapp'
+#PASS
+app.config['SECRET_KEY'] = 'LnBsfo2rFTk0OSFF'
 
 mongo = PyMongo(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
+#client = PyMongo.MongoClient("mongodb+srv://farhanmukit0:LnBsfo2rFTk0OSFF@cluster0.otbjk4d.mongodb.net/")
+#mongo.db.create_collection('users')
+
 
 class User(UserMixin):
     def __init__(self, username, password_hash=None, auth_token_hash=None, _id=None):
@@ -20,6 +25,7 @@ class User(UserMixin):
         self.password_hash = password_hash
         self.auth_token_hash = auth_token_hash
         self._id = _id
+        
 
     def get_id(self):
         return str(self._id)
@@ -43,8 +49,10 @@ def load_user(user_id):
         return None
     return User(username=u['username'], password_hash=u['password_hash'], auth_token_hash=u['auth_token_hash'], _id=u['_id'])
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/usercreate', methods=['GET', 'POST'])
 def home():
+    flash("page loaded")
+
     if request.method == 'POST':
         users_collection = mongo.db.users
         if 'register' in request.form:
@@ -91,6 +99,7 @@ def home():
 
                     resp = make_response(redirect(url_for('home')))
                     resp.set_cookie('auth_token', auth_token, httponly=True, max_age=3600)
+                    print('passok')
                     return resp
             flash('Invalid credentials.')
             return redirect(url_for('home'))
@@ -102,73 +111,19 @@ def logout():
     logout_user()
     resp = make_response(redirect(url_for('home')))
     resp.set_cookie('auth_token', '', expires=0)
+
+
     return resp
+
+@app.route('/recipe')
+def recipepage():
+    return render_template("recipe.html")
+
+@app.route('/')
+#definging pages on website- represnt what were displaying
+def homepage():
+    #inline html- when we return to function
+    return render_template("landing.html")
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-
-
-
-
-
-
-
-# from flask import Flask, request, jsonify, make_response
-# from flask_pymongo import PyMongo
-# from flask_bcrypt import Bcrypt
-# from flask_jwt_extended import JWTManager, create_access_token, jwt_required, set_access_cookies, unset_jwt_cookies
-# from werkzeug.urls import url_quote  
-# app = Flask(__name__)
-
-# app.config["MONGO_URI"] = "mongodb://localhost:27017/yourdbname"
-# app.config['JWT_SECRET_KEY'] = 'your_secret_key'  # Change this!
-
-# mongo = PyMongo(app)
-# bcrypt = Bcrypt(app)
-# jwt = JWTManager(app)
-
-# @app.route('/register', methods=['POST'])
-# def register():
-#     users = mongo.db.users
-#     username = request.json['username']
-#     password = request.json['password']
-#     confirm_password = request.json['confirm_password']
-
-#     if password != confirm_password:
-#         return jsonify({"error": "Passwords do not match"}), 400
-
-#     existing_user = users.find_one({'username': username})
-
-#     if existing_user:
-#         return jsonify({"error": "Username already exists"}), 409
-
-#     hashpass = bcrypt.generate_password_hash(password).decode('utf-8')
-#     users.insert_one({'username': username, 'password': hashpass})
-
-#     return jsonify({"message": "User created successfully"}), 201
-
-
-# @app.route('/login', methods=['POST'])
-# def login():
-#     users = mongo.db.users
-#     username = request.json['username']
-#     password = request.json['password']
-
-#     user = users.find_one({'username': username})
-
-#     if user and bcrypt.check_password_hash(user['password'], password):
-#         access_token = create_access_token(identity=username)
-#         response = jsonify({"message": "Login successful"})
-#         set_access_cookies(response, access_token)
-#         return response, 200
-
-#     return jsonify({"error": "Invalid username or password"}), 401
-
-# @app.route('/logout', methods=['POST'])
-# @jwt_required()
-# def logout():
-#     response = jsonify({"msg": "logout successful"})
-#     unset_jwt_cookies(response)  # This correctly clears the JWT cookies
-#     return response
