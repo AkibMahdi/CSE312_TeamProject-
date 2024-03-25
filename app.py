@@ -14,8 +14,7 @@ app.config['SECRET_KEY'] = 'LnBsfo2rFTk0OSFF'
 mongo = PyMongo(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
-#client = PyMongo.MongoClient("mongodb+srv://farhanmukit0:LnBsfo2rFTk0OSFF@cluster0.otbjk4d.mongodb.net/")
-#mongo.db.create_collection('users')
+
 
 
 class User(UserMixin):
@@ -129,19 +128,7 @@ def recipepage():
     
 
 
-        #return redirect(url_for('recipepage'))
-    
-    # if request.method == 'GET':
-    #     cards = []
-
-    #     for recipe in recipes_collection:
-    #         recipeNameId = recipe['recipename']
-    #         recipeIngredientsId = recipe['ingredients']
-    #         recipeDescription = recipe['description']
-    #         cards.append([recipeNameId, recipeIngredientsId, recipeDescription, User.username])
-
     all_recipes = recipes_collection.find() 
-    print(all_recipes) # This retrieves all documents in the recipes collection
+    print(all_recipes) 
 
-    # Passing all recipes to the template
     return render_template("recipe.html", recipes=all_recipes, user=current_user)
