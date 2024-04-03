@@ -5,6 +5,8 @@ from flask_bcrypt import Bcrypt
 from bson.objectid import ObjectId
 from markupsafe import escape
 import hashlib
+from flask_socketio import SocketIO, send. emit
+
 
 
 app = Flask(__name__)
@@ -16,6 +18,8 @@ app.config['SECRET_KEY'] = 'LnBsfo2rFTk0OSFF'
 mongo = PyMongo(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
+socketio = SocketIO(app)
+
 #client = PyMongo.MongoClient("mongodb+srv://farhanmukit0:LnBsfo2rFTk0OSFF@cluster0.otbjk4d.mongodb.net/")
 #mongo.db.create_collection('users')
 
@@ -191,8 +195,25 @@ def set_response_headers(response):
 @app.route('/')
 def homepage():
     return render_template("landing.html")
+# give event namw
+@socketio.on('message')
+def handle_message(message):
+    print("Recieved Message" + message)
+    #send to all clients - method send -boradcast to all connected cleints
+    send(mesage,broadcast= True)
+
+@socketio.on('image')
+def handle_image(image_data):
+	print('Recieved image data')
+    #read time funct
+    emit('image', image_data, broadcast = True)
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
+    # passing app regf
+    socketio.run(app)
+
 
 
