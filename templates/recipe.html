@@ -65,5 +65,52 @@
     </div>
 
     <script src="/static/recipe.js"></script>
+
+
+    <form id="form">
+<input type="text" id="input" placeholder="Enter Text Message"
+       <input type="file" id="image" accept="image/*">
+    <button type="submit"> Send Message</button>
+</form>
+
+<ul id = "message"
+<script>let socket= io()
+let form= document.getElementbyId('form')
+let input = docuemnt.getElementbyID('input')
+let imageInput = docuemnt.getElementbyID('image')
+
+
+
+form.addEventListener('submit', (event) => {
+    event.preventDefault()
+    let message = input.value
+
+ //send instrc to b-e
+    socket.emit('message', message)
+
+
+    // celar input
+    input.value = ""
+})
+imageInput.addEventListenter('change', (e) => {
+    //capture image
+    let file = imageInput.files[0]
+    // read file api
+    let reader= new FileReader()
+    reader.addEventLister('load', () => {
+// psdd into spp
+        socket.emit('image', reader.result)
+    })
+    //read base 64 encodig of img
+    reader.readAsDataURL(file)
+})
+// listening for message
+socket.on('message', (message) => {
+    let li= docment.createElement('li')
+    li.textContent = message
+    document.getElementbyId('messages').preprend(li)
+    // showing latest message
+})</script>
+</ul>
 </body>
 </html>
