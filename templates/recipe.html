@@ -19,12 +19,12 @@
 
     <header class='recipepost'>
         <h2>FlavorFeed</h2>
-        <form method ="POST" action="/recipe">
+        <form method ="POST" action="/recipe" enctype="multipart/form-data">
         <input type="text" name="recipename" placeholder="Enter Recipe Name" required><br><br>
         <input type="text" name="recipeingredients" placeholder="Enter Ingredients Seperated by Commas, Specify Portion by :" required><br><br>
         <input type="text" name="recipedescription" placeholder="Enter Recipe Name" required><br><br>
-
-        <input type="submit" value="Add Recipe" name="addrecipe" > <br><br>
+        <input type="file" name="mediafile" placeholder="Upload a File to Appendix your Recipe" accept="image/*,video/*,audio/*"><br><br>
+        <input type="submit" value="Add Recipe" name="addrecipe"> <br><br>
          Current User:  {{current_user.username}}
         </form>
     </header>
@@ -39,7 +39,8 @@
             <h3>{{ recipe.recipename }}</h3>
             <input type="hidden" name="recipe_id" value="{{recipe._id}}">
 
-            <p>Recipe ID: {{recipe._id}}</p>
+            <p name="rec_id">Recipe ID: {{recipe._id}}</p>
+            <p>Recipe {{ recipe.filetype }}: </p><br><br>{{ recipe.media|safe }}
  
             <p>Ingredients: {{ recipe.ingredients }}</p>
             <p>Description: {{ recipe.description }}</p>
@@ -55,7 +56,7 @@
             {% endif %}
 
             <form method="POST" action="/recipe">
-                <input type="hidden" name="recipe_id" value="{{ recipe._id }}">
+                <input type="hidden" name="recipe_id" value="{{ recipes._id }}">
                 <input type="text" placeholder="Comment" name="comment">
                 <input type="submit" name='addcomment'>
             </form>

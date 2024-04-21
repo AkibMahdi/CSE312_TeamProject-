@@ -4,7 +4,9 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, curren
 from flask_bcrypt import Bcrypt
 from bson.objectid import ObjectId
 from markupsafe import escape
+import random
 import hashlib
+import os
 
 
 app = Flask(__name__)
@@ -12,6 +14,13 @@ app = Flask(__name__)
 app.config['MONGO_URI'] = 'mongodb+srv://farhanmukit0:LnBsfo2rFTk0OSFF@cluster0.otbjk4d.mongodb.net/recipeapp'
 #PASS
 app.config['SECRET_KEY'] = 'LnBsfo2rFTk0OSFF'
+app.config['UPLOAD_FOLDER'] = 'static/media'
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'mp4', 'mp3', 'wav'}
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 mongo = PyMongo(app)
 bcrypt = Bcrypt(app)
@@ -20,10 +29,7 @@ login_manager = LoginManager(app)
 #mongo.db.create_collection('users')
 
 
-auth-test
 
-
-main
 class User(UserMixin):
     def __init__(self, username, password_hash=None, auth_token_hash=None, _id=None):
         self.username = username
@@ -122,14 +128,16 @@ def logout():
 
     return resp
 
+
+
 @app.route('/recipe', methods=['GET', 'POST'])
 @login_required
 def recipepage():
     recipes_collection = mongo.db.recipes
     comments_collection = mongo.db.comments
 
-
     if request.method == 'POST':
+         
         if 'addcomment' in request.form:
             comments_collection.insert_one({
                 'content': request.form.get('comment'),
@@ -138,13 +146,72 @@ def recipepage():
             })
             return redirect(url_for('recipepage'))
         elif 'addrecipe' in request.form:
-            recipes_collection.insert_one({
-                'recipename': request.form.get('recipename'),
-                'ingredients': request.form.get('recipeingredients'),
-                'description': request.form.get('recipedescription'),
-                'username': current_user.username
+            if 'mediafile' in request.files:
+                mediafile = request.files['mediafile']
+                # If the user does not select a file, the browser submits an
+                # empty file without a filename.
+                if mediafile.filename == '':
+                    flash('No selected file', 'warning')
+                    return redirect(request.url)
+                if mediafile and allowed_file(mediafile.filename):
+                    filename = mediafile.filename
+                    mime_type = mediafile.mimetype
+                    if mime_type.startswith('image/'):
+                        filetype = 'image'
+                    elif mime_type.startswith('video/'):
+                        filetype = 'video'
+                    elif mime_type.startswith('audio/'):
+                        filetype = 'audio'
+                    else:
+                        flash('Invalid file type', 'danger')
+                        return redirect(request.url)
+
+                    # Generate a unique filename
+                    filename = f"{filetype}_{random.randint(0, 999999)}.{filename.rsplit('.', 1)[1].lower()}"
+
+                    # Save file
+                    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+                    mediafile.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                    
+                    # Add media HTML to the recipe
+                    media_html = ''
+                    if filetype == 'image':
+                        media_html = f'<img src="/{app.config["UPLOAD_FOLDER"]}/{filename}" alt="Uploaded image">'
+                    elif filetype == 'video':
+                        media_html = f'<video width="320" height="240" controls><source src="/{app.config["UPLOAD_FOLDER"]}/{filename}" type="{mime_type}"></video>'
+                    elif filetype == 'audio':
+                        media_html = f'<audio controls><source src="/{app.config["UPLOAD_FOLDER"]}/{filename}" type="{mime_type}"></audio>'
+
+
+                    # Save recipe with media content
+                    new_recipe = {
+                        'recipename': request.form.get('recipename'),
+                        'ingredients': request.form.get('recipeingredients'),
+                        'description': request.form.get('recipedescription'),
+                        'username': current_user.username,
+                        'media' : media_html,
+                        'filetype' : filetype
+                    }
+                recipes_collection.insert_one(new_recipe)
+                flash('Recipe with media uploaded successfully!', 'success')
+                return redirect(url_for('recipepage'))
+
+   
+
+        if 'addcomment' in request.form:
+            comments_collection.insert_one({
+                'content': request.form.get('comment'),
+                'user': current_user.username,
+                'recipeid': ObjectId(request.form.get('recipe_id'))
             })
             return redirect(url_for('recipepage'))
+            # recipes_collection.insert_one({
+            #     'recipename': request.form.get('recipename'),
+            #     'ingredients': request.form.get('recipeingredients'),
+            #     'description': request.form.get('recipedescription'),
+            #     'username': current_user.username
+            # })
+            #return redirect(url_for('recipepage'))
         
     all_recipes = list(recipes_collection.find())
     for recipe in all_recipes:
