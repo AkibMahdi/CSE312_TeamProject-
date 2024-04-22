@@ -200,7 +200,7 @@ def live_chat():
 
 @socketio.on('message')
 def handleMessage(msg):
-    socketio.emit(current_user.username + ": " + msg)
+    socketio.emit(msg)
 
 
 
