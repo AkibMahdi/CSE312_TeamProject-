@@ -4,4 +4,8 @@ Flask-Bcrypt==0.7.1
 Flask-PyMongo==2.3.0
 markupsafe==2.1.1
 Werkzeug==2.0.2
+Flask-SocketIO==5.1.1
+gevent==21.8.0
+gevent-websocket==0.10.1
+
 

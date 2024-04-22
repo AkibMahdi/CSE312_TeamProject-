@@ -244,7 +244,7 @@ def before_request_func():
             return redirect(url_for('home'))
 
 
-        
+
 
 
 
@@ -253,7 +253,6 @@ def set_response_headers(response):
     response.headers["X-Content-Type-Options"] = "nosniff"
     return response
 
- 
 
 @app.route('/')
 def homepage():
@@ -261,5 +260,6 @@ def homepage():
 
 if __name__ == '__main__':
     app.run(debug=True)
+    
 
 
