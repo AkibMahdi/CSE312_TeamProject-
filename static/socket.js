@@ -16,8 +16,9 @@ function sendMessage() {
     input.value = '';
 }
 
-document.getElementById('message-input').onkeypress = function(e) {
-    if (e.keyCode == 13) {
+document.getElementById('message-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
         sendMessage();
+        e.preventDefault(); 
     }
-};
+});
