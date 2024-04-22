@@ -287,41 +287,63 @@ def set_response_headers(response):
 
  
 
+# @app.route('/')
+# def homepage():
+#     return render_template("landing.html")
+
+# @app.route('/health')
+# def healthCheck():
+#     return 'OK', 200
+
+
+# # @app.route('/livechat')
+# # @login_required
+# # def live_chat():
+# #     return render_template('live_chat.html')
+
+# # @socketio.on('message')
+# # def handle_message(data):
+# #     emit('message', data, broadcast=True)
+# #     print("message has been sent")
+
+# @app.route('/meltingpot')
+# @login_required
+# def live_chat():
+#     return render_template('meltingpot.html')
+
+# # @socketio.on('message')
+# # def handleMessage(msg):
+# #     # print('Message: ' + msg)
+# #     socketio.emit('message', msg)
+
+# @socketio.on('message')
+# def handleMessage(msg):
+#     if current_user.is_authenticated:
+#         msg = f"{current_user.username}: {msg}"
+#     emit('message', msg, broadcast = True)
+
 @app.route('/')
 def homepage():
-    return render_template("landing.html")
-
+    return render_template("index.html")
 @app.route('/health')
 def healthCheck():
     return 'OK', 200
 
-
-# @app.route('/livechat')
-# @login_required
-# def live_chat():
-#     return render_template('live_chat.html')
-
-# @socketio.on('message')
-# def handle_message(data):
-#     emit('message', data, broadcast=True)
-#     print("message has been sent")
 
 @app.route('/meltingpot')
 @login_required
 def live_chat():
     return render_template('meltingpot.html')
 
-# @socketio.on('message')
-# def handleMessage(msg):
-#     # print('Message: ' + msg)
-#     socketio.emit('message', msg)
+@app.route('/landing')
+def landing_page():
+    return render_template('landing.html', user=current_user)
 
 @socketio.on('message')
 def handleMessage(msg):
     if current_user.is_authenticated:
         msg = f"{current_user.username}: {msg}"
     emit('message', msg, broadcast = True)
-
 
 
 
