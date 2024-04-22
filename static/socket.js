@@ -1,21 +1,23 @@
-document.addEventListener('DOMContentLoaded', function() {
-    var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
-
-    socket.on('connect', () => {
-        const form = document.getElementById('send-message-form');
-        form.onsubmit = function(e) {
-            e.preventDefault();
-            let messageInput = document.getElementById('message');
-            let message = messageInput.value;
-            socket.emit('send_message', {'message': message});
-            messageInput.value = '';
-        };
-    });
-
-    socket.on('receive_message', function(data) {
-        const messages = document.getElementById('messages');
-        const li = document.createElement('li');
-        li.innerHTML = `<b>${data.username}</b>: ${data.message}`;
-        messages.appendChild(li);
-    });
+var socket = io();
+socket.on('connect', function() {
+    console.log('Connected');
 });
+
+socket.on('message', function(msg) {
+    var item = document.createElement('li');
+    item.textContent = msg;
+    document.getElementById('messages').appendChild(item);
+    window.scrollTo(0, document.body.scrollHeight);
+});
+
+function sendMessage() {
+    var input = document.getElementById('message-input');
+    socket.emit('message', input.value);
+    input.value = '';
+}
+
+document.getElementById('message-input').onkeypress = function(e) {
+    if (e.keyCode == 13) {
+        sendMessage();
+    }
+};
