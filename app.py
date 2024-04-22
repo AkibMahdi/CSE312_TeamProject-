@@ -209,11 +209,11 @@ def recipepage():
                     # Add media HTML to the recipe
                     media_html = ''
                     if filetype == 'image':
-                        media_html = f'<img src="/{app.config["UPLOAD_FOLDER"]}/{filename}" alt="Uploaded image" width="100" height="100">'
+                        media_html = f'<img src="/{app.config["UPLOAD_FOLDER"]}/{filename}?{{ cache_bust }}" alt="Uploaded image" width="100" height="100">'
                     elif filetype == 'video':
-                        media_html = f'<video width="320" height="240" controls><source src="/{app.config["UPLOAD_FOLDER"]}/{filename}" type="{mime_type}"></video>'
+                        media_html = f'<video width="320" height="240" controls><source src="/{app.config["UPLOAD_FOLDER"]}/{filename}?{{ cache_bust }}" type="{mime_type}"></video>'
                     elif filetype == 'audio':
-                        media_html = f'<audio controls><source src="/{app.config["UPLOAD_FOLDER"]}/{filename}" type="{mime_type}"></audio>'
+                        media_html = f'<audio controls><source src="/{app.config["UPLOAD_FOLDER"]}/{filename}?{{ cache_bust }}" type="{mime_type}"></audio>'
 
 
                     # Save recipe with media content
@@ -249,8 +249,10 @@ def recipepage():
     all_recipes = list(recipes_collection.find())
     for recipe in all_recipes:
         recipe['comments'] = list(comments_collection.find({'recipeid': ObjectId(recipe['_id'])}))
+    cache_bust = random.randint(0,9999)
+    
 
-    return render_template("recipe.html", recipes=all_recipes, user=current_user)
+    return render_template("recipe.html", recipes=all_recipes, user=current_user, cache_bust=cache_bust)
 
 def verify_token(auth_token):
     user = User.query.filter_by(auth_token=auth_token).first()
