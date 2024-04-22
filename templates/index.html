@@ -109,7 +109,7 @@
         <section id="user-info">
            
             <p>Welcome, <span id="username">{{current_user.username}}</span>!</p>
-            <form action="/logout">
+            <form action="{{ url_for('logout') }}" method="POST">
                 <input type="submit" value="Logout">
             </form>
         </section>
