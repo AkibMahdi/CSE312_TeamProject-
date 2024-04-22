@@ -124,7 +124,7 @@ def home():
 
     return render_template('index.html', user=current_user)
 
-@app.route('/logout')
+@app.route('/logout', methods=['POST'])
 def logout():
     logout_user()
     resp = make_response(redirect(url_for('home')))
