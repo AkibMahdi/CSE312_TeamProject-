@@ -1,0 +1,79 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <div id='mp'>
+        <h1>The Melting Pot</h1>
+    </div>
+
+    <form action = "livemessage">
+
+    </form>
+    
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Chat Room</title>
+    <style>
+        #messages {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            height: 300px;
+            overflow-y: scroll;
+            border: 1px solid #ccc;
+        }
+        #messages li {
+            padding: 8px;
+            margin-bottom: 2px;
+            background-color: #f3f3f3;
+            border: 1px solid #ddd;
+        }
+        #message-input {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <ul id="messages"></ul>
+    <input id="message-input" type="text" placeholder="Type message..." />
+    <button onclick="sendMessage()">Send</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+    <script>
+        var socket = io();
+        socket.on('connect', function() {
+            console.log('Connected');
+        });
+
+        socket.on('message', function(msg) {
+            var item = document.createElement('li');
+            item.textContent = msg;
+            document.getElementById('messages').appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+
+        function sendMessage() {
+            var input = document.getElementById('message-input');
+            socket.emit('message', input.value);
+            input.value = '';
+        }
+
+        document.getElementById('message-input').onkeypress = function(e) {
+            if (e.keyCode == 13) {
+                sendMessage();
+            }
+        };
+    </script>
+</body>
+</html>

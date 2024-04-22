@@ -58,3 +58,30 @@ document.addEventListener('DOMContentLoaded', function() {
         recipesContainer.appendChild(recipeCard);
     }
 });
+    ingredientFilter.addEventListener('input', function() {
+        const filterValue = ingredientFilter.value.toLowerCase();
+        const recipes = document.querySelectorAll('.recipe-card');
+
+        recipes.forEach(function(recipe) {
+            const ingredients = recipe.querySelector('p.ingredients').textContent.toLowerCase();
+            if (ingredients.includes(filterValue)) {
+                recipe.style.display = 'block';
+            } else {
+                recipe.style.display = 'none';
+            }
+        });
+    });
+
+    function displayRecipe(recipe) {
+        const recipeCard = document.createElement('div');
+        recipeCard.classList.add('recipe-card');
+        recipeCard.innerHTML = `
+            <h2>${recipe.name}</h2>
+            <h3>Ingredients:</h3>
+            <p class="ingredients">${recipe.ingredients}</p>
+            <h3>Instructions:</h3>
+            <p>${recipe.instructions}</p>
+        `;
+        recipesContainer.appendChild(recipeCard);
+    }
+});

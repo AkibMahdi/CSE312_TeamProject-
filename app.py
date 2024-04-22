@@ -5,29 +5,27 @@ from flask_bcrypt import Bcrypt
 from bson.objectid import ObjectId
 from markupsafe import escape
 import hashlib
-from flask_socketio import SocketIO, send. emit
-
+from flask_socketio import SocketIO, emit
+import eventlet, gunicorn
+from gevent import monkey
 
 
 app = Flask(__name__)
 #THIS IS THE CONNECTION STRING NEEDED TO CONNECT TO THE DATABASE
-app.config['MONGO_URI'] = 'mongodb+srv://farhanmukit0:LnBsfo2rFTk0OSFF@cluster0.otbjk4d.mongodb.net/recipeapp'
+#app.config['MONGO_URI'] = 'mongodb+srv://farhanmukit0:LnBsfo2rFTk0OSFF@cluster0.otbjk4d.mongodb.net/recipeapp'
+app.config['MONGO_URI'] = 'mongodb+srv://farhanmukit0:LnBsfo2rFTk0OSFF@cluster0.otbjk4d.mongodb.net/recipeapp?tls=true&tlsAllowInvalidCertificates=true'
+
+monkey.patch_all()
 #PASS
 app.config['SECRET_KEY'] = 'LnBsfo2rFTk0OSFF'
+socketio = SocketIO(app, logger=True, async_mode = 'gevent')
 
 mongo = PyMongo(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
-socketio = SocketIO(app)
-
 #client = PyMongo.MongoClient("mongodb+srv://farhanmukit0:LnBsfo2rFTk0OSFF@cluster0.otbjk4d.mongodb.net/")
 #mongo.db.create_collection('users')
 
-
-auth-test
-
-
-main
 class User(UserMixin):
     def __init__(self, username, password_hash=None, auth_token_hash=None, _id=None):
         self.username = username
@@ -61,8 +59,6 @@ def load_user(user_id):
 @app.route('/usercreate', methods=['GET', 'POST'])
 def home():
     flash("page loaded")
-
-    
 
     if request.method == 'POST':
         users_collection = mongo.db.users
@@ -195,25 +191,31 @@ def set_response_headers(response):
 @app.route('/')
 def homepage():
     return render_template("landing.html")
-# give event namw
-@socketio.on('message')
-def handle_message(message):
-    print("Recieved Message" + message)
-    #send to all clients - method send -boradcast to all connected cleints
-    send(mesage,broadcast= True)
 
-@socketio.on('image')
-def handle_image(image_data):
-	print('Recieved image data')
-    #read time funct
-    emit('image', image_data, broadcast = True)
+
+# @app.route('/livechat')
+# @login_required
+# def live_chat():
+#     return render_template('live_chat.html')
+
+# @socketio.on('message')
+# def handle_message(data):
+#     emit('message', data, broadcast=True)
+#     print("message has been sent")
+
+@app.route('/meltingpot')
+@login_required
+def live_chat():
+    return render_template('meltingpot.html')
+
+@socketio.on('message')
+def handleMessage(msg):
+    # print('Message: ' + msg)
+    socketio.emit('message', msg)
+
 
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
-    # passing app regf
-    socketio.run(app)
-
-
-
+    #app.run(debug=True)
+    socketio.run(app, debug=True)
