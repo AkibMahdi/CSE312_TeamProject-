@@ -58,7 +58,7 @@
             {% endif %}
 
             <form method="POST" action="/recipe">
-                <input type="hidden" name="recipe_id" value="{{ recipe._id }}">
+                <input type="hidden" name="recipe_id" value="{{ recipes._id }}">
                 <input type="text" placeholder="Comment" name="comment">
                 <input type="submit" name='addcomment'>
             </form>
