@@ -1,3 +1,5 @@
+from gevent import monkey
+monkey.patch_all()
 from flask import Flask, render_template, request, redirect, url_for, flash, make_response
 from flask_pymongo import PyMongo
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
@@ -7,7 +9,7 @@ from markupsafe import escape
 import hashlib
 from flask_socketio import SocketIO, emit
 import eventlet, gunicorn
-from gevent import monkey
+
 
 
 app = Flask(__name__)
@@ -15,7 +17,7 @@ app = Flask(__name__)
 #app.config['MONGO_URI'] = 'mongodb+srv://farhanmukit0:LnBsfo2rFTk0OSFF@cluster0.otbjk4d.mongodb.net/recipeapp'
 app.config['MONGO_URI'] = 'mongodb+srv://farhanmukit0:LnBsfo2rFTk0OSFF@cluster0.otbjk4d.mongodb.net/recipeapp?tls=true&tlsAllowInvalidCertificates=true'
 
-monkey.patch_all()
+
 #PASS
 app.config['SECRET_KEY'] = 'LnBsfo2rFTk0OSFF'
 socketio = SocketIO(app, logger=True, async_mode = 'gevent')
