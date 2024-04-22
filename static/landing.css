@@ -1,0 +1,138 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: #0a2e36; 
+    color: white;
+    line-height: 1.6;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2.5%;
+    background: #1b4b5a; 
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.logo-container img {
+    width: 50px; 
+    height: auto;
+}
+
+.logo-container .logo-caption {
+    margin-left: 0.5rem;
+    color: #f2f2f2;
+}
+
+.logo-container h3 {
+    display: none; 
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+}
+
+nav ul li {
+    margin-left: 20px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    transition: color 0.3s ease-in-out;
+}
+
+nav ul li a:hover, nav ul li a:active {
+    color: #f2f2f2; 
+}
+
+.hero-content {
+    text-align: center;
+    padding: 4rem 0; 
+}
+
+.hero-content h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.hero-content h2 {
+    font-size: 1.5rem; 
+    margin-bottom: 2rem;
+    color: #aad4e5; 
+}
+
+.hero-content p {
+    margin-bottom: 2rem;
+}
+
+.cta-buttons {
+    margin-bottom: 4rem;
+}
+
+.cta-buttons .button {
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+    margin: 0 0.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    color: white;
+    display: inline-block; 
+    text-decoration: none; 
+}
+
+.cta-buttons .button:first-child {
+    background: #e94957; 
+}
+
+.cta-buttons .button:first-child:hover {
+    background: #c73545; 
+}
+
+.cta-buttons .button:last-child {
+    background: #324d5b; 
+}
+
+.cta-buttons .button:last-child:hover {
+    background: #293d49; 
+}
+
+footer {
+    background: #12343b; 
+    color: #f2f2f2;
+    text-align: center;
+    padding: 1rem;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+footer small {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+footer a {
+    color: #aad4e5; 
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: #f2f2f2; 
+}
