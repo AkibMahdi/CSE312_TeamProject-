@@ -247,7 +247,6 @@ def before_request_func():
 
 
 
-
 @app.after_request
 def set_response_headers(response):
     response.headers["X-Content-Type-Options"] = "nosniff"
