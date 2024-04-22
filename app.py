@@ -209,7 +209,7 @@ def recipepage():
                     # Add media HTML to the recipe
                     media_html = ''
                     if filetype == 'image':
-                        media_html = f'<img src="/{app.config["UPLOAD_FOLDER"]}/{filename}" alt="Uploaded image">'
+                        media_html = f'<img src="/{app.config["UPLOAD_FOLDER"]}/{filename}" alt="Uploaded image" width="100" height="100">'
                     elif filetype == 'video':
                         media_html = f'<video width="320" height="240" controls><source src="/{app.config["UPLOAD_FOLDER"]}/{filename}" type="{mime_type}"></video>'
                     elif filetype == 'audio':
