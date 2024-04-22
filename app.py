@@ -1,5 +1,3 @@
-from gevent import monkey
-monkey.patch_all()
 from flask import Flask, render_template, request, redirect, url_for, flash, make_response
 from flask_pymongo import PyMongo
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
@@ -9,7 +7,7 @@ from markupsafe import escape
 import hashlib
 from flask_socketio import SocketIO, emit
 import eventlet, gunicorn
-
+from gevent import monkey
 
 
 app = Flask(__name__)
@@ -17,7 +15,7 @@ app = Flask(__name__)
 #app.config['MONGO_URI'] = 'mongodb+srv://farhanmukit0:LnBsfo2rFTk0OSFF@cluster0.otbjk4d.mongodb.net/recipeapp'
 app.config['MONGO_URI'] = 'mongodb+srv://farhanmukit0:LnBsfo2rFTk0OSFF@cluster0.otbjk4d.mongodb.net/recipeapp?tls=true&tlsAllowInvalidCertificates=true'
 
-
+monkey.patch_all()
 #PASS
 app.config['SECRET_KEY'] = 'LnBsfo2rFTk0OSFF'
 socketio = SocketIO(app, logger=True, async_mode = 'gevent')
@@ -114,15 +112,14 @@ def home():
 
     return render_template('index.html', user=current_user)
 
-@app.route('/logout')
+@app.route('/logout', methods=['POST'])
 def logout():
     logout_user()
     resp = make_response(redirect(url_for('home')))
-    resp.set_cookie('auth_token', '', expires=0)
-
-
-
+    resp.set_cookie('auth_token', '', expires=0, path='/')
+    flash('You have been logged out.')
     return resp
+
 
 @app.route('/recipe', methods=['GET', 'POST'])
 @login_required
@@ -194,36 +191,19 @@ def set_response_headers(response):
 def homepage():
     return render_template("landing.html")
 
-@app.route('/health')
-def healthCheck():
-    return 'OK', 200
 
-
-# @app.route('/livechat')
-# @login_required
-# def live_chat():
-#     return render_template('live_chat.html')
-
-# @socketio.on('message')
-# def handle_message(data):
-#     emit('message', data, broadcast=True)
-#     print("message has been sent")
 
 @app.route('/meltingpot')
 @login_required
 def live_chat():
-    return render_template('meltingpot.html')
+    return render_template('meltingpot.html', user=current_user)
 
 @socketio.on('message')
-def handleMessage(msg, user:User):
-    # print('Message: ' + msg)
-    socketio.emit('message', msg)
-
-
+def handleMessage(msg):
+    socketio.emit(current_user.username + ": " + msg)
 
 
 
 
 if __name__ == '__main__':
-    #app.run(debug=True)
     socketio.run(app, debug=True)
