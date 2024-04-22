@@ -215,7 +215,7 @@ def live_chat():
     return render_template('meltingpot.html')
 
 @socketio.on('message')
-def handleMessage(msg, user:User):
+def handleMessage(msg):
     # print('Message: ' + msg)
     socketio.emit('message', msg)
 
