@@ -194,6 +194,10 @@ def set_response_headers(response):
 def homepage():
     return render_template("landing.html")
 
+@app.route('/health')
+def healthCheck():
+    return 'OK', 200
+
 
 # @app.route('/livechat')
 # @login_required
@@ -211,9 +215,11 @@ def live_chat():
     return render_template('meltingpot.html')
 
 @socketio.on('message')
-def handleMessage(msg):
+def handleMessage(msg, user:User):
     # print('Message: ' + msg)
     socketio.emit('message', msg)
+
+
 
 
 
