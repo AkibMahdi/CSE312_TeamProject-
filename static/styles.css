@@ -9,7 +9,6 @@ body {
     padding: 0;
 }
 
-/* Header styling */
 header {
     background-color: #007BFF;
     color: white;
@@ -17,7 +16,6 @@ header {
     padding: 10px 0;
 }
 
-/* Chat container styling */
 #chat-container {
     margin: 20px auto;
     width: 90%;
@@ -28,7 +26,7 @@ header {
     padding: 20px;
 }
 
-/* Messages list */
+
 #messages {
     list-style-type: none;
     padding: 0;
@@ -39,18 +37,18 @@ header {
     background-color: #fafafa;
 }
 
-/* Individual message */
+
 #messages li {
     padding: 8px 16px;
     border-bottom: 1px solid #eee;
 }
 
-/* Last item in the list does not have a bottom border */
+
 #messages li:last-child {
     border-bottom: none;
 }
 
-/* Form styling */
+
 #send-message-form {
     display: flex;
 }
@@ -77,6 +75,6 @@ header {
 }
 
 #chat-log {
-    height: 300px; /* Adjust height as needed */
-    overflow-y: scroll; /* Enable vertical scrollbar if content overflows */
+    height: 300px; 
+    overflow-y: scroll; 
 }
