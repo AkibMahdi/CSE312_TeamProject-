@@ -128,7 +128,7 @@ def home():
 def logout():
     logout_user()
     resp = make_response(redirect(url_for('home')))
-    resp.set_cookie('auth_token', '', expires=0, path='/)
+    resp.set_cookie('auth_token', '', expires=0, path='/')
 
 
 
