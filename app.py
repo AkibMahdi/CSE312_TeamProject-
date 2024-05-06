@@ -149,7 +149,7 @@ def logout():
 @app.route('/recipe', methods=['GET', 'POST'])
 @login_required
 def recipepage():
-    recipes_collection = mongo.db.recipes
+    recipes_collection = mongo.db.cookbook
     comments_collection = mongo.db.comments
 
     if request.method == 'POST':
