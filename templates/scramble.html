@@ -1,0 +1,62 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scramble - The Ingredient Guessing Game</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/scramble.css') }}">
+    <script src="{{ url_for('static', filename='js/scramble.js') }}" defer></script>
+</head>
+<body>
+    <nav>
+        <div class= "navbar">
+            <ul>
+                <li><a href="/usercreate">Register or Login</a></li>
+                <li><a href="/recipe">Create Recipe</a></li>
+                <li><a id="home" href="/">Home</a></li>
+                <li><a href="/meltingpot">Melting Pot</a></li>
+                <li><a href="/landing">Landing Page</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div id="game-container">
+        <h1 id="game-title">Scramble</h1>
+        <p id="game-instructions">Guess the correct ingredients for the dish shown below. You have 30 seconds!</p>
+        <h2 id="dish-name" style="display:none;">Dish Name Here</h2>
+        <div id="ingredient-buttons" style="display:none;"></div>
+        <p id="timer-container" style="display:none;">Time left: <span id="timer">30</span> seconds</p>
+        <button id="start-button" onclick="startGame()">Start Game</button>
+    </div>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scramble</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='scramble.css') }}">
+    <script src="{{ url_for('static', filename='scramble.js') }}" defer></script>
+</head>
+<body>
+    <nav> 
+        <div class= "navbar">
+            <ul>
+                <li><a href="/usercreate">Register or Login</a></li>
+                <li><a href="/recipe">Create Recipe</a></li>
+                <li><a id="home" href="/">Home</a></li>
+                <li><a href="/meltingpot">Melting Pot</a></li>
+                <li><a href="/landing">Landing Page</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div id="game-container">
+        <h1 id="game-title">Scramble</h1>
+        <p id="game-instructions">Guess the correct ingredients for the dish shown below. You have 20 seconds!</p>
+        <h2 id="dish-name" style="display:none;">Dish Name Here</h2>
+        <div id="ingredient-buttons" style="display:none;"></div>
+        <p id="timer-container" style="display:none;">Time left: <span id="timer">20</span> seconds</p>
+        <p id="message-display"></p> 
+        <button id="start-button" onclick="startGame()">Start Game</button>
+    </div>
+</body>
+</html>
