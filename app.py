@@ -277,57 +277,7 @@ def handleMessage(msg):
         msg = f"{current_user.username}: {msg}"
     emit('message', msg, broadcast = True)
 
-##################################################
 
-
-
-# ingredients = [
-#     "Spaghetti", "Eggs", "Guanciale", "Pecorino Cheese", "Black Pepper", 
-#     "Chicken", "Bacon", "Parmesan", "Cream", "Onions", "Garlic", 
-#     "Mushrooms", "Parsley", "Tomato Sauce", "Bread", "Beef", "Pork", "Carrots"
-# ]
-
-# mongo.db.ingredients.insert_one({"all_ingredients": ingredients})
-
-
-# dishes = [
-#     {
-#         "name": "Spaghetti Carbonara",
-#         "ingredients": ["Spaghetti", "Eggs", "Guanciale", "Pecorino Cheese", "Black Pepper"]
-#     },
-#     {
-#         "name": "Margherita Pizza",
-#         "ingredients": ["Pizza Dough", "Tomato Sauce", "Mozzarella Cheese", "Basil"]
-#     }
-# ]
-
-# mongo.db.dishes.insert_many(dishes)
-
-# new_ingredients = [
-#     "Tomatoes", "Cucumber", "Spinach", "Rice", "Beans",
-#     "Beef", "Pork", "Carrots", "Vinegar", "Soy Sauce",
-#     "Chicken Broth", "Sour Cream", "Chives", "Tortillas", "Fish"
-# ]
-
-# new_dishes = [
-#     {
-#         "name": "Beef Taco",
-#         "ingredients": ["Beef", "Cheese", "Tomatoes", "Tortillas", "Sour Cream"]
-#     },
-#     {
-#         "name": "Vegetable Stir Fry",
-#         "ingredients": ["Rice", "Carrots", "Beans", "Soy Sauce", "Chicken Broth"]
-#     },
-#     {
-#         "name": "Chicken Salad",
-#         "ingredients": ["Chicken", "Lettuce", "Tomatoes", "Cucumber", "Vinegar"]
-#     }
-# ]
-
-
-# mongo.db.ingredients.update_one({}, { '$addToSet': { 'all_ingredients': { '$each': new_ingredients } }})
-
-# mongo.db.dishes.insert_many(new_dishes)
 
 
 @app.route('/scramble')
