@@ -1,6 +1,7 @@
 from gevent import monkey
+import gevent, eventlet
 monkey.patch_all()
-from flask import Flask, render_template, request, redirect, url_for, flash, make_response
+from flask import Flask, render_template, request, redirect, url_for, flash, make_response, jsonify
 from flask_pymongo import PyMongo
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from flask_bcrypt import Bcrypt
@@ -10,7 +11,10 @@ import hashlib
 import random
 import os
 from flask_socketio import SocketIO, emit
-import eventlet, gunicorn
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+from datetime import datetime, timedelta
+#import jsonify
 
 
 
@@ -26,11 +30,17 @@ app.config['UPLOAD_FOLDER'] = 'static/media'
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'mp4', 'mp3', 'wav'}
 
+# limiter = Limiter(app, key_func=get_remote_address, default_limits=["50 per 10 seconds"])
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 socketio = SocketIO(app, logger=True, async_mode = 'gevent')
+
+@app.errorhandler(429)
+def lim(e):
+    return "Wait to Send More Requests", 429
 
 mongo = PyMongo(app)
 bcrypt = Bcrypt(app)
@@ -68,6 +78,7 @@ def load_user(user_id):
         return None
     return User(username=u['username'], password_hash=u['password_hash'], auth_token_hash=u['auth_token_hash'], _id=u['_id'])
 
+# @limiter.limit("50 per 10 seconds")
 @app.route('/usercreate', methods=['GET', 'POST'])
 def home():
     flash("page loaded")
@@ -134,35 +145,7 @@ def logout():
 
     return resp
 
-# @app.route('/recipe', methods=['GET', 'POST'])
-# @login_required
-# def recipepage():
-#     recipes_collection = mongo.db.recipes
-#     comments_collection = mongo.db.comments
 
-
-#     if request.method == 'POST':
-#         if 'addcomment' in request.form:
-#             comments_collection.insert_one({
-#                 'content': request.form.get('comment'),
-#                 'user': current_user.username,
-#                 'recipeid': ObjectId(request.form.get('recipe_id'))
-#             })
-#             return redirect(url_for('recipepage'))
-#         elif 'addrecipe' in request.form:
-#             recipes_collection.insert_one({
-#                 'recipename': request.form.get('recipename'),
-#                 'ingredients': request.form.get('recipeingredients'),
-#                 'description': request.form.get('recipedescription'),
-#                 'username': current_user.username
-#             })
-#             return redirect(url_for('recipepage'))
-        
-#     all_recipes = list(recipes_collection.find())
-#     for recipe in all_recipes:
-#         recipe['comments'] = list(comments_collection.find({'recipeid': ObjectId(recipe['_id'])}))
-
-#     return render_template("recipe.html", recipes=all_recipes, user=current_user)
 @app.route('/recipe', methods=['GET', 'POST'])
 @login_required
 def recipepage():
@@ -230,21 +213,6 @@ def recipepage():
                 return redirect(url_for('recipepage'))
 
    
-
-        # if 'addcomment' in request.form:
-        #     comments_collection.insert_one({
-        #         'content': request.form.get('comment'),
-        #         'user': current_user.username,
-        #         'recipeid': ObjectId(request.form.get('recipe_id'))
-        #     })
-        #     return redirect(url_for('recipepage'))
-            # recipes_collection.insert_one({
-            #     'recipename': request.form.get('recipename'),
-            #     'ingredients': request.form.get('recipeingredients'),
-            #     'description': request.form.get('recipedescription'),
-            #     'username': current_user.username
-            # })
-            #return redirect(url_for('recipepage'))
         
     all_recipes = list(recipes_collection.find())
     for recipe in all_recipes:
@@ -278,55 +246,16 @@ def before_request_func():
             return redirect(url_for('home'))
 
 
-        
-
-
-
 @app.after_request
 def set_response_headers(response):
     response.headers["X-Content-Type-Options"] = "nosniff"
     return response
 
- 
-
-# @app.route('/')
-# def homepage():
-#     return render_template("landing.html")
-
-# @app.route('/health')
-# def healthCheck():
-#     return 'OK', 200
-
-
-# # @app.route('/livechat')
-# # @login_required
-# # def live_chat():
-# #     return render_template('live_chat.html')
-
-# # @socketio.on('message')
-# # def handle_message(data):
-# #     emit('message', data, broadcast=True)
-# #     print("message has been sent")
-
-# @app.route('/meltingpot')
-# @login_required
-# def live_chat():
-#     return render_template('meltingpot.html')
-
-# # @socketio.on('message')
-# # def handleMessage(msg):
-# #     # print('Message: ' + msg)
-# #     socketio.emit('message', msg)
-
-# @socketio.on('message')
-# def handleMessage(msg):
-#     if current_user.is_authenticated:
-#         msg = f"{current_user.username}: {msg}"
-#     emit('message', msg, broadcast = True)
 
 @app.route('/')
 def homepage():
-    return render_template("index.html")
+    return render_template("landing.html")
+
 @app.route('/health')
 def healthCheck():
     return 'OK', 200
@@ -347,8 +276,126 @@ def handleMessage(msg):
         msg = f"{current_user.username}: {msg}"
     emit('message', msg, broadcast = True)
 
+##################################################
 
 
+
+# ingredients = [
+#     "Spaghetti", "Eggs", "Guanciale", "Pecorino Cheese", "Black Pepper", 
+#     "Chicken", "Bacon", "Parmesan", "Cream", "Onions", "Garlic", 
+#     "Mushrooms", "Parsley", "Tomato Sauce", "Bread", "Beef", "Pork", "Carrots"
+# ]
+
+# mongo.db.ingredients.insert_one({"all_ingredients": ingredients})
+
+
+# dishes = [
+#     {
+#         "name": "Spaghetti Carbonara",
+#         "ingredients": ["Spaghetti", "Eggs", "Guanciale", "Pecorino Cheese", "Black Pepper"]
+#     },
+#     {
+#         "name": "Margherita Pizza",
+#         "ingredients": ["Pizza Dough", "Tomato Sauce", "Mozzarella Cheese", "Basil"]
+#     }
+# ]
+
+# mongo.db.dishes.insert_many(dishes)
+
+# new_ingredients = [
+#     "Tomatoes", "Cucumber", "Spinach", "Rice", "Beans",
+#     "Beef", "Pork", "Carrots", "Vinegar", "Soy Sauce",
+#     "Chicken Broth", "Sour Cream", "Chives", "Tortillas", "Fish"
+# ]
+
+# new_dishes = [
+#     {
+#         "name": "Beef Taco",
+#         "ingredients": ["Beef", "Cheese", "Tomatoes", "Tortillas", "Sour Cream"]
+#     },
+#     {
+#         "name": "Vegetable Stir Fry",
+#         "ingredients": ["Rice", "Carrots", "Beans", "Soy Sauce", "Chicken Broth"]
+#     },
+#     {
+#         "name": "Chicken Salad",
+#         "ingredients": ["Chicken", "Lettuce", "Tomatoes", "Cucumber", "Vinegar"]
+#     }
+# ]
+
+
+# mongo.db.ingredients.update_one({}, { '$addToSet': { 'all_ingredients': { '$each': new_ingredients } }})
+
+# mongo.db.dishes.insert_many(new_dishes)
+
+
+@app.route('/scramble')
+def game():
+    return render_template('scramble.html')
+
+@app.route('/scramble/start')
+def start_game():
+    dishes = list(mongo.db.dishes.find())
+    if not dishes:
+        return jsonify({'error': 'No dishes available'}), 404
+
+    selected_dish = random.choice(dishes)
+    correct_ingredients = selected_dish['ingredients']
+    all_ingredients = mongo.db.ingredients.find_one()['all_ingredients']
+    incorrect_ingredients = [ing for ing in all_ingredients if ing not in correct_ingredients]
+    random.shuffle(incorrect_ingredients)
+    selected_ingredients = correct_ingredients + incorrect_ingredients[:10]
+    random.shuffle(selected_ingredients)
+
+    game_id = mongo.db.games.insert_one({
+        'dish_id': selected_dish['_id'],
+        'dish_name': selected_dish['name'],
+        'correct_ingredients': correct_ingredients,
+        'selected_ingredients': selected_ingredients,
+        'guessed_ingredients': [],
+        'hints': [],
+        'attempts': 0
+    }).inserted_id
+    return jsonify(game_id=str(game_id), dish_name=selected_dish['name'], ingredients=selected_ingredients)
+
+@app.route('/scramble/guess', methods=['POST'])
+def guess_ingredients():
+    game_id = request.json['game_id']
+    guessed_ingredient = request.json['guessed_ingredient']
+    game = mongo.db.games.find_one({'_id': ObjectId(game_id)})
+
+    if not game:
+        return jsonify({'error': 'Game not found'}), 404
+
+    # Retrieve or initialize guessed ingredients
+    guessed_ingredients = set(game.get('guessed_ingredients', []))
+    guessed_ingredients.add(guessed_ingredient)
+
+    # Update guessed ingredients in database
+    mongo.db.games.update_one({'_id': ObjectId(game_id)}, {'$set': {'guessed_ingredients': list(guessed_ingredients)}})
+
+    correct_ingredients = set(game['correct_ingredients'])
+    hits = guessed_ingredients.intersection(correct_ingredients)
+
+    # Check if all correct ingredients have been guessed
+    if guessed_ingredients >= correct_ingredients:
+        mongo.db.games.update_one({'_id': ObjectId(game_id)}, {'$set': {'completed': True}})
+        return jsonify({'win': True, 'attempts': game['attempts'] + 1})
+
+    # Provide hint if not all ingredients are guessed correctly
+    hint = random.choice(list(correct_ingredients - hits)) if correct_ingredients != hits else None
+    return jsonify({
+        'correct': guessed_ingredient in correct_ingredients,
+        'hits': list(hits),
+        'hint': hint,
+        'attempts': game['attempts'] + 1
+    })
+
+
+@app.route('/leaderboard')
+def leaderboard():
+    leaders = mongo.db.leaderboard.find().sort('attempts')
+    return render_template('leaderboard.html', leaders=leaders)
 
 
 if __name__ == '__main__':
