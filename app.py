@@ -30,7 +30,7 @@ app.config['UPLOAD_FOLDER'] = 'static/media'
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'mp4', 'mp3', 'wav'}
 
-# limiter = Limiter(app, key_func=get_remote_address, default_limits=["50 per 10 seconds"])
+limiter = Limiter(app, key_func=get_remote_address, default_limits=["50 per 10 seconds"])
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -78,7 +78,7 @@ def load_user(user_id):
         return None
     return User(username=u['username'], password_hash=u['password_hash'], auth_token_hash=u['auth_token_hash'], _id=u['_id'])
 
-# @limiter.limit("50 per 10 seconds")
+@limiter.limit("50 per 10 seconds")
 @app.route('/usercreate', methods=['GET', 'POST'])
 def home():
     flash("page loaded")
@@ -266,6 +266,7 @@ def healthCheck():
 def live_chat():
     return render_template('meltingpot.html')
 
+@limiter.limit("50 per 10 seconds")
 @app.route('/landing')
 def landing_page():
     return render_template('landing.html', user=current_user)
